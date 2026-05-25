@@ -22,12 +22,12 @@ app.use(cors({
 
 app.use("/api/v1/user",userRoute)
 
-app.get("/home",(_,res)=>{
-    res.status(200).json({
-        success:true,
-        message:"welcome to home page"
-    })
-})
+// app.get("/home",(_,res)=>{
+//     res.status(200).json({
+//         success:true,
+//         message:"welcome to home page"
+//     })
+// })
 
 app.listen(PORT, ()=>{
     console.log(`server is running on port ${PORT}`);

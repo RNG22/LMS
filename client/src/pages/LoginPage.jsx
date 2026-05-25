@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react";
 
 import {
   Card,
@@ -6,19 +6,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-
-import { Input } from "@/components/ui/input"
-
-import { Label } from "@/components/ui/label"
-
-import { Button } from "@/components/ui/button"
-
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+  useLoginUserMutation,
+  useRegisterUserMutation,
+} from "../features/api/authApi";
+import { toast } from "sonner";
 
 export function LoginPage() {
   const [activeTab, setActiveTab] = useState("signup");
@@ -31,6 +28,24 @@ export function LoginPage() {
     email: "",
     password: "",
   });
+  const [
+    registerUser,
+    {
+      data: registerData,
+      error: registerError,
+      isLoading: registerIsLoading,
+      isSuccess: registerIsSuccess,
+    },
+  ] = useRegisterUserMutation();
+  const [
+    loginUser,
+    {
+      data: loginData,
+      error: loginError,
+      isLoading: loginIsLoading,
+      isSuccess: loginIsSuccess,
+    },
+  ] = useLoginUserMutation();
 
   const changeInputhandler = (e) => {
     const { name, value } = e.target;
@@ -43,19 +58,60 @@ export function LoginPage() {
   const handlleSubmit = (e) => {
     e.preventDefault();
     if (activeTab === "signup") {
+        registerUser(signupInput);
       // Handle signup logic here
       console.log("Signup Data:", signupInput);
     } else {
+      loginUser(loginInput);
       // Handle login logic here
       console.log("Login Data:", loginInput);
     }
   };
+useEffect(() => {
+
+    if (registerError) {
+
+        toast.error(
+            registerError?.data?.message || "Signup failed"
+        );
+
+    }
+
+    if (registerData && registerIsSuccess) {
+
+        toast.success(registerData.message);
+    }
+
+}, [
+    registerData,
+    registerError,
+    registerIsSuccess
+]);
+useEffect(() => {
+
+    if (loginError) {
+
+        toast.error(
+            loginError?.data?.message || "Login failed"
+        );
+
+    }
+
+    if (loginData && loginIsSuccess) {
+
+        toast.success(loginData.message);
+    }
+
+}, [
+    loginData,
+    loginError,
+    loginIsSuccess
+]);
 
   return (
     // <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-     <div className="flex items-start justify-center min-h-screen bg-gray-100 p-4 pt-50">
+    <div className="flex items-start justify-center min-h-screen bg-gray-100 p-4 pt-50">
       <div className="w-[400px]">
-        
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="signup">Signup</TabsTrigger>
@@ -64,7 +120,6 @@ export function LoginPage() {
         </Tabs>
 
         <div className="mt-4">
-
           {/* Signup Form */}
 
           {activeTab === "signup" && (
@@ -78,14 +133,13 @@ export function LoginPage() {
 
               <CardContent>
                 <form className="space-y-4" onSubmit={handlleSubmit}>
-
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input
                       id="name"
                       type="text"
-                          name="name"
-                        value={signupInput.name}
+                      name="name"
+                      value={signupInput.name}
                       placeholder="Enter your name"
                       required
                       onChange={changeInputhandler}
@@ -97,12 +151,12 @@ export function LoginPage() {
                     <Input
                       id="email"
                       type="email"
-                            name="email"
+                      name="email"
                       placeholder="Enter your email"
                       value={signupInput.email}
                       required
                       autoComplete="email"
-                        onChange={changeInputhandler}
+                      onChange={changeInputhandler}
                     />
                   </div>
 
@@ -111,19 +165,18 @@ export function LoginPage() {
                     <Input
                       id="password"
                       type="password"
-                            name="password"
-                            value={signupInput.password}
+                      name="password"
+                      value={signupInput.password}
                       placeholder="Create password"
                       required
                       autoComplete="new-password"
-                        onChange={changeInputhandler}
+                      onChange={changeInputhandler}
                     />
                   </div>
 
-                  <Button className="w-full">
-                    Signup
+                  <Button disabled={registerUser.isLoading} className="w-full">
+                    {registerUser.isLoading ? "Signing up..." : "Signup"}
                   </Button>
-
                 </form>
               </CardContent>
             </Card>
@@ -142,18 +195,17 @@ export function LoginPage() {
 
               <CardContent>
                 <form className="space-y-4" onSubmit={handlleSubmit}>
-
                   <div className="space-y-2">
                     <Label htmlFor="login-email">Email</Label>
                     <Input
                       id="login-email"
                       type="email"
-                          name="email"
-                          value={loginInput.email}
+                      name="email"
+                      value={loginInput.email}
                       placeholder="Enter your email"
                       required
                       autoComplete="email"
-                        onChange={changeInputhandler}
+                      onChange={changeInputhandler}
                     />
                   </div>
 
@@ -162,26 +214,24 @@ export function LoginPage() {
                     <Input
                       id="login-password"
                       type="password"
-                            name="password"
-                            value={loginInput.password}
+                      name="password"
+                      value={loginInput.password}
                       placeholder="Enter password"
-                        required
-                            autoComplete="current-password"
-                        onChange={changeInputhandler}
+                      required
+                      autoComplete="current-password"
+                      onChange={changeInputhandler}
                     />
                   </div>
 
-                  <Button className="w-full">
-                    Login
+                  <Button disabled={loginUser.isLoading} className="w-full">
+                    {loginUser.isLoading ? "Logging in..." : "Login"}
                   </Button>
-
                 </form>
               </CardContent>
             </Card>
           )}
-
         </div>
       </div>
     </div>
-  )
+  );
 }

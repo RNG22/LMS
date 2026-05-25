@@ -2,18 +2,15 @@ import { useState } from 'react'
 import './App.css'
 import { Button } from './components/ui/button'
 import { LoginPage } from './pages/LoginPage'
+import { Navbar } from './components/ui/Navbar'
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+    <Navbar/>
     <LoginPage/>
-       {/* <Button>
-      Tailwind Working
-    </Button>
-    <h1 className="text-3xl font-bold text-red-500">
-      Tailwind Working
-    </h1> */}
+      
     </>
   )
 }
