@@ -35,14 +35,14 @@ export const Navbar = () => {
   <DropdownMenuContent>
     <DropdownMenuGroup>
       <DropdownMenuLabel>My Account</DropdownMenuLabel>
-      <DropdownMenuItem>My Learning</DropdownMenuItem>
-      <DropdownMenuItem>Edit Profile</DropdownMenuItem>
+      <DropdownMenuItem><Link to="/my-learning">My Learning</Link></DropdownMenuItem>
+      <DropdownMenuItem><Link to="/profile">Edit Profile</Link></DropdownMenuItem>
     </DropdownMenuGroup>
     <DropdownMenuSeparator />
     <DropdownMenuGroup>
-      <DropdownMenuItem>Logout</DropdownMenuItem>
+      <DropdownMenuItem><Link to="/login">Logout</Link></DropdownMenuItem>
 
-      <DropdownMenuItem>Dashboard</DropdownMenuItem>
+      <DropdownMenuItem><Link to="/dashboard">Dashboard</Link></DropdownMenuItem>
     </DropdownMenuGroup>
   </DropdownMenuContent>
 </DropdownMenu>):(<div className='flex items-center gap-5'>
@@ -70,6 +70,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Separator } from '@/components/ui/separator';
+import { Link } from 'react-router-dom';
     const MobileNavbar=()=>{
         const role="instructor";
         return(

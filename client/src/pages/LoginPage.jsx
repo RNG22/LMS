@@ -16,8 +16,10 @@ import {
   useRegisterUserMutation,
 } from "../features/api/authApi";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 export function LoginPage() {
+  const navigate=useNavigate();
   const [activeTab, setActiveTab] = useState("signup");
   const [loginInput, setLoginInput] = useState({
     email: "",
@@ -98,8 +100,8 @@ useEffect(() => {
     }
 
     if (loginData && loginIsSuccess) {
-
         toast.success(loginData.message);
+        navigate("/");
     }
 
 }, [
@@ -110,7 +112,7 @@ useEffect(() => {
 
   return (
     // <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-    <div className="flex items-start justify-center min-h-screen bg-gray-100 p-4 pt-50">
+    <div className="flex items-start justify-center min-h-screen bg-gray-100 p-4 pt-20">
       <div className="w-[400px]">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-2">
